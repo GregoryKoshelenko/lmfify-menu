@@ -13,21 +13,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       height: 100vh;
       margin: 0;
-      position: relative;
       overflow: hidden;
-    }
-    /* Hide the title */
-    h1 {
-      display: none;
-    }
-    .logo-corner {
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      z-index: 10;
+      padding-top: 4.5rem;
     }
     .menu {
       display: grid;
@@ -50,36 +40,48 @@
       }
     }
     .menu-btn {
-      background: linear-gradient(90deg, #23272a 0%, #2c2f34 100%);
+      background: rgba(58, 28, 113, 0.18);
       color: #00eaff;
       border: none;
-      border-radius: 8px;
+      border-radius: 16px;
       padding: 1.2rem 2.5rem;
       font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 24px #3a1c7144, 0 1.5px 0.5px #fff2 inset;
       transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 1rem;
-      outline: none;
-      width: 220px;
-      height: 70px;
-      justify-content: center;
+      padding-left: 1.2em;
+      width: 270px;
+      height: 85px;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(120deg, #ffffff44 0%, #3a1c7100 100%);
+      opacity: 0.22;
+      pointer-events: none;
+      border-radius: 16px;
     }
     .menu-btn:hover {
-      background: linear-gradient(90deg, #2c2f34 0%, #23272a 100%);
+      background: rgba(58, 28, 113, 0.28);
       transform: scale(1.05);
-      box-shadow: 0 6px 30px #00eaff44;
+      box-shadow: 0 8px 36px #3a1c7188, 0 2px 1px #fff3 inset;
     }
     .menu-btn img {
-      height: 2em;
-      width: 2em;
-      margin-right: 0.7em;
-      border-radius: 6px;
-      background: #222;
-      filter: none;
-      box-shadow: none;
+      height: 2.7em;
+      width: 2.7em;
+      margin-right: 1em;
+      margin-left: 0;
+      border-radius: 8px;
+      background: rgba(58, 28, 113, 0.22);
+      box-shadow: 0 2px 8px #3a1c7122, 0 1px 0.5px #fff2 inset;
+      backdrop-filter: blur(6px) saturate(1.5);
     }
     .ai-bg {
       position: absolute;
@@ -92,10 +94,10 @@
 </head>
 <body>
     <canvas class="ai-bg"></canvas>
-    <div style="margin-bottom: 2rem; position: relative; z-index: 1;">
+    <div style="margin-top: 2.5rem; margin-bottom: 4rem; display: flex; justify-content: center; align-items: center; width: 100%;">
       <img src="./LMfify_logo_3.png" alt="Lmfify Logo" style="height: 8em; width: 8em; border-radius: 50%; background: #00eaff22; box-shadow: 0 0 30px #00eaff88; display: block; margin: 0 auto;" />
     </div>
-    <div class="menu" style="position: relative; z-index: 1;">
+    <div class="menu">
       <button class="menu-btn" onclick="window.location.href='https://34.89.189.15:8080/'">
         <img src="./logo.webp" alt="ArgoCD Icon" />
         ArgoCD
@@ -124,18 +126,15 @@
       }
       window.addEventListener('resize', resize);
       resize();
-      // Neuron nodes
-      const nodes = Array.from({length: 18}, (_,i) => ({
+      const nodes = Array.from({length: 18}, () => ({
         x: Math.random()*w,
         y: Math.random()*h,
         r: 12+Math.random()*10,
         vx: (Math.random()-0.5)*0.5,
         vy: (Math.random()-0.5)*0.5
       }));
-      // Animate
       function draw() {
         ctx.clearRect(0,0,w,h);
-        // Draw relations
         ctx.strokeStyle = '#00eaff88';
         ctx.lineWidth = 2;
         for(let i=0;i<nodes.length;i++){
@@ -150,7 +149,6 @@
             }
           }
         }
-        // Draw neurons
         for(const n of nodes){
           ctx.beginPath();
           ctx.arc(n.x,n.y,n.r,0,2*Math.PI);
