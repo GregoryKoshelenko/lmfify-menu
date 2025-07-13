@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lmfify</title>
+  <link rel="icon" type="image/png" href="./LMfify_logo_3.png" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #2c5364, #3a1c71);
+      color: #00eaff;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Hide the title */
+    h1 {
+      display: none;
+    }
+    .logo-corner {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 10;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      justify-items: center;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    @media (min-width: 600px) {
+      .menu {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (min-width: 900px) {
+      .menu {
+        grid-template-columns: 1fr 1fr;
+        max-width: 600px;
+      }
+    }
+    .menu-btn {
+      background: linear-gradient(90deg, #23272a 0%, #2c2f34 100%);
+      color: #00eaff;
+      border: none;
+      border-radius: 8px;
+      padding: 1.2rem 2.5rem;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      outline: none;
+    }
+    .menu-btn:hover {
+      background: linear-gradient(90deg, #2c2f34 0%, #23272a 100%);
+      transform: scale(1.05);
+      box-shadow: 0 6px 30px #00eaff44;
+    }
+    .menu-btn img {
+      height: 2em;
+      width: 2em;
+      margin-right: 0.7em;
+      filter: drop-shadow(0 0 6px #00eaff88);
+      border-radius: 6px;
+      background: #222;
+    }
+    .ai-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+  </style>
+</head>
+<body>
+    <canvas class="ai-bg"></canvas>
+    <div style="margin-bottom: 2rem; position: relative; z-index: 1;">
+      <img src="./LMfify_logo_3.png" alt="Lmfify Logo" style="height: 8em; width: 8em; border-radius: 50%; background: #00eaff22; box-shadow: 0 0 30px #00eaff88; display: block; margin: 0 auto;" />
+    </div>
+    <div class="menu" style="position: relative; z-index: 1;">
+      <button class="menu-btn" onclick="window.location.href='https://34.89.189.15:8080/'">
+        <img src="./logo.webp" alt="ArgoCD Icon" />
+        ArgoCD
+      </button>
+      <button class="menu-btn" onclick="window.location.href='http://35.198.78.167:8001/'">
+        <img src="./kagent.svg" alt="KAgent Icon" />
+        Kagent
+      </button>
+      <button class="menu-btn" onclick="window.location.href='/grafana/'">
+        <img src="./grafana.svg" alt="Grafana Icon" />
+        Grafana
+      </button>
+      <button class="menu-btn" onclick="window.location.href='/prometheus/'">
+        <img src="./Prometheus_software_logo.png" alt="Prometheus Icon" />
+        Prometheus
+      </button>
+    </div>
+    <script>
+      // AI neurons and relations animation
+      const canvas = document.querySelector('.ai-bg');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      // Neuron nodes
+      const nodes = Array.from({length: 18}, (_,i) => ({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: 12+Math.random()*10,
+        vx: (Math.random()-0.5)*0.5,
+        vy: (Math.random()-0.5)*0.5
+      }));
+      // Animate
+      function draw() {
+        ctx.clearRect(0,0,w,h);
+        // Draw relations
+        ctx.strokeStyle = '#00eaff88';
+        ctx.lineWidth = 2;
+        for(let i=0;i<nodes.length;i++){
+          for(let j=i+1;j<nodes.length;j++){
+            const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y;
+            const dist=Math.sqrt(dx*dx+dy*dy);
+            if(dist<220){
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x,nodes[i].y);
+              ctx.lineTo(nodes[j].x,nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+        // Draw neurons
+        for(const n of nodes){
+          ctx.beginPath();
+          ctx.arc(n.x,n.y,n.r,0,2*Math.PI);
+          ctx.fillStyle = '#3a1c71';
+          ctx.shadowColor = '#00eaff';
+          ctx.shadowBlur = 16;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.beginPath();
+          ctx.arc(n.x,n.y,n.r*0.5,0,2*Math.PI);
+          ctx.fillStyle = '#00eaff';
+          ctx.fill();
+        }
+      }
+      function animate(){
+        for(const n of nodes){
+          n.x+=n.vx;
+          n.y+=n.vy;
+          if(n.x<0||n.x>w) n.vx*=-1;
+          if(n.y<0||n.y>h) n.vy*=-1;
+        }
+        draw();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+</body>
+</html>
