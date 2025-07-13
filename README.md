@@ -4,7 +4,7 @@ A modern, AI-inspired menu page for quick access to your favorite tools.
 
 ## Demo
 
-<video src="demo.webm" controls width="600"></video>
+[Demo Video (click to play)](https://gregorykoshelenko.github.io/lmfify-menu/demo.webm)
 
 ## Features
 - Responsive grid layout
